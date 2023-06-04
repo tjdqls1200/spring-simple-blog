@@ -1,6 +1,7 @@
 package me.sungbin.blog.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.sungbin.blog.common.exception.article.ArticleNotFoundException;
 import me.sungbin.blog.controller.dto.AddArticleRequest;
 import me.sungbin.blog.service.BlogService;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -80,6 +82,13 @@ class BlogRestControllerTest {
                 jsonPath("$[0].title").isString(),
                 jsonPath("$[0].content").isString()
         );
+    }
+
+    @DisplayName("게시글 단건 조회 실패시 ArticleNotFoundException 예외가 발생한다.")
+    @Test
+    public void findArticleException() throws Exception {
+        assertThatThrownBy(() -> blogService.findOne(100000L))
+                .isInstanceOf(ArticleNotFoundException.class);
     }
 
     @Transactional

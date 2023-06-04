@@ -6,6 +6,7 @@ import me.sungbin.blog.domain.Article;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
@@ -19,8 +20,8 @@ public class BlogRepository {
         return article;
     }
 
-    public Article findById(Long id) {
-        return em.find(Article.class, id);
+    public Optional<Article> findById(Long id) {
+        return Optional.ofNullable(em.find(Article.class, id));
     }
 
     public List<Article> findAll() {
