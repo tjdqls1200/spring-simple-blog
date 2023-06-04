@@ -6,7 +6,6 @@ import me.sungbin.blog.controller.dto.AddArticleRequest;
 import me.sungbin.blog.controller.dto.ArticleResponse;
 import me.sungbin.blog.controller.dto.UpdateArticleRequest;
 import me.sungbin.blog.service.BlogService;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
