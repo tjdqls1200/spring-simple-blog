@@ -3,6 +3,8 @@ package me.sungbin.blog.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.sungbin.blog.common.exception.article.ArticleNotFoundException;
 import me.sungbin.blog.controller.dto.AddArticleRequest;
+import me.sungbin.blog.controller.dto.ArticleResponse;
+import me.sungbin.blog.controller.dto.UpdateArticleRequest;
 import me.sungbin.blog.service.BlogService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -98,14 +103,14 @@ class BlogRestControllerTest {
     @Test
     public void findArticle() throws Exception {
         //given
-        final String url = "/api/articles/%d";
+        final String url = "/api/articles/{id}";
         final String title = "제목1";
         final String content = "내용1";
 
         //when
         final Long id = blogService.save(new AddArticleRequest(title, content));
 
-        var result = mockMvc.perform(get(String.format(url, id))
+        var result = mockMvc.perform(get(url, id)
                 .contentType(APPLICATION_JSON));
 
         //then
@@ -126,7 +131,31 @@ class BlogRestControllerTest {
         assertThat(blogService.findAll()).isEmpty();
     }
 
+    @DisplayName("게시글 수정 시 정상적으로 변경이 된다.")
+    @Test
+    public void articleUpdateSuccessTest() throws Exception {
+        //given
+        final String url = "/api/articles/{id}";
+        final String updateTitle = "변경 후 제목";
+        final String updateContent = "변경 후 제목";
+        final String requestBody = objectMapper.writeValueAsString(new UpdateArticleRequest(updateTitle, updateContent));
 
+        final Long id = blogService.save(new AddArticleRequest("변경 전 제목", "변경 전 내용"));
+
+
+        //when
+        var result = mockMvc.perform(put(url, id)
+                .contentType(APPLICATION_JSON)
+                .content(requestBody));
+
+        var findArticle = blogService.findOne(id);
+
+        //then
+        result.andExpect(status().isOk());
+        result.andExpect(header().string(HttpHeaders.LOCATION, "/api/articles/" + id));
+        assertThat(findArticle.getTitle()).isEqualTo(updateTitle);
+        assertThat(findArticle.getContent()).isEqualTo(updateContent);
+    }
 }
 
 
