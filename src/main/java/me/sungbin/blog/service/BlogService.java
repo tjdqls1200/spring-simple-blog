@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.sungbin.blog.common.exception.article.ArticleNotFoundException;
 import me.sungbin.blog.controller.dto.AddArticleRequest;
 import me.sungbin.blog.controller.dto.ArticleResponse;
+import me.sungbin.blog.controller.dto.UpdateArticleRequest;
 import me.sungbin.blog.domain.Article;
 import me.sungbin.blog.repository.BlogRepository;
 import org.springframework.stereotype.Service;
@@ -43,5 +44,12 @@ public class BlogService {
         blogRepository.findById(id).ifPresentOrElse(
                 blogRepository::delete,
                 ArticleNotFoundException::new);
+    }
+
+    @Transactional
+    public void updateArticle(Long id, UpdateArticleRequest updateArticleRequest) {
+        final Article article = blogRepository.findById(id).orElseThrow(ArticleNotFoundException::new);
+
+        article.update(updateArticleRequest.getTitle(), updateArticleRequest.getContent());
     }
 }

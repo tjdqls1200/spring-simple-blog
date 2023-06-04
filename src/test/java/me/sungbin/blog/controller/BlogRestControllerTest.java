@@ -125,6 +125,8 @@ class BlogRestControllerTest {
         assertDoesNotThrow(() -> blogService.deleteArticle(id));
         assertThat(blogService.findAll()).isEmpty();
     }
+
+
 }
 
 
