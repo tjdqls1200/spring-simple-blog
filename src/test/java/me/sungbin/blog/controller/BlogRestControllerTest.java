@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.sungbin.blog.common.exception.article.ArticleNotFoundException;
 import me.sungbin.blog.controller.dto.AddArticleRequest;
 import me.sungbin.blog.service.BlogService;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -114,6 +116,15 @@ class BlogRestControllerTest {
         );
     }
 
+    @DisplayName("게시글이 정상적으로 삭제된다.")
+    @Test
+    public void deleteArticleSuccessTest() throws Exception {
+        //given
+        final Long id = blogService.save(new AddArticleRequest("제목1", "내용1"));
+
+        assertDoesNotThrow(() -> blogService.deleteArticle(id));
+        assertThat(blogService.findAll()).isEmpty();
+    }
 }
 
 
