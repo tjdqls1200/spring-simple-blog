@@ -47,6 +47,7 @@ class BlogRestControllerTest {
 
         result.andExpect(status().isCreated());
 
+
         final List<Article> articles = blogRepository.findAll();
 
         assertThat(articles.size()).isEqualTo(1);

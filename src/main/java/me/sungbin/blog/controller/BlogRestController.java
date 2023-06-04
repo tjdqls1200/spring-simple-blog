@@ -23,4 +23,5 @@ public class BlogRestController {
 
         return ResponseEntity.created(URI.create(String.format(ARTICLE_REQUEST_FORMAT, id))).build();
     }
+
 }
