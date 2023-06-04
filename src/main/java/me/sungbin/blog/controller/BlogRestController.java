@@ -5,6 +5,7 @@ import me.sungbin.blog.controller.dto.AddArticleRequest;
 import me.sungbin.blog.controller.dto.ArticleResponse;
 import me.sungbin.blog.service.BlogService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,5 +37,12 @@ public class BlogRestController {
     @GetMapping("/api/articles/{id}")
     public ResponseEntity<ArticleResponse> findArticle(@PathVariable Long id) {
         return ResponseEntity.ok(blogService.findOne(id));
+    }
+
+    @DeleteMapping("/api/articles/{id}")
+    public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
+        blogService.deleteArticle(id);
+
+        return ResponseEntity.ok().build();
     }
 }

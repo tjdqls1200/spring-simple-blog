@@ -37,4 +37,11 @@ public class BlogService {
                 .map(ArticleResponse::from)
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public void deleteArticle(Long id) {
+        blogRepository.findById(id).ifPresentOrElse(
+                blogRepository::delete,
+                ArticleNotFoundException::new);
+    }
 }

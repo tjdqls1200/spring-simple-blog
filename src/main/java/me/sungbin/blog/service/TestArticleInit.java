@@ -1,21 +1,21 @@
 package me.sungbin.blog.service;
 
 import lombok.RequiredArgsConstructor;
-import me.sungbin.blog.domain.Article;
-import me.sungbin.blog.repository.BlogRepository;
+import lombok.extern.slf4j.Slf4j;
+import me.sungbin.blog.controller.dto.AddArticleRequest;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.transaction.event.TransactionalEventListener;
+import org.springframework.context.event.EventListener;
 
+@Slf4j
 @RequiredArgsConstructor
 public class TestArticleInit {
 
-    private final BlogRepository blogRepository;
+    private final BlogService blogService;
 
-    @TransactionalEventListener(ApplicationReadyEvent.class)
+    @EventListener(ApplicationReadyEvent.class)
     public void initArticles() {
-        blogRepository.save(new Article("제목1", "내용1"));
-        blogRepository.save(new Article("제목2", "내용2"));
-        blogRepository.save(new Article("제목3", "내용3"));
-
+        blogService.save(new AddArticleRequest("제목1", "내용1"));
+        blogService.save(new AddArticleRequest("제목2", "내용2"));
+        blogService.save(new AddArticleRequest("제목3", "내용3"));
     }
 }

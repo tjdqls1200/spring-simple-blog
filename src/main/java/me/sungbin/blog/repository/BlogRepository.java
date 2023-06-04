@@ -28,4 +28,8 @@ public class BlogRepository {
         return em.createQuery("SELECT a FROM Article a", Article.class)
                 .getResultList();
     }
+
+    public void delete(Article article) {
+        em.remove(article);
+    }
 }

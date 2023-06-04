@@ -1,6 +1,6 @@
 package me.sungbin.blog;
 
-import me.sungbin.blog.repository.BlogRepository;
+import me.sungbin.blog.service.BlogService;
 import me.sungbin.blog.service.TestArticleInit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,8 +16,7 @@ public class BlogApplication {
 
     @Bean
     @Profile("local")
-    public TestArticleInit testArticleInit(BlogRepository blogRepository) {
-        return new TestArticleInit(blogRepository);
+    public TestArticleInit testArticleInit(BlogService blogService) {
+        return new TestArticleInit(blogService);
     }
-
 }
