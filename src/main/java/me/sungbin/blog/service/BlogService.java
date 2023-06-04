@@ -21,6 +21,12 @@ public class BlogService {
         return blogRepository.save(articleRequest.toEntity()).getId();
     }
 
+    @Transactional(readOnly = true)
+    public ArticleResponse findOne(Long id) {
+        return ArticleResponse.from(blogRepository.findById(id));
+    }
+
+    @Transactional(readOnly = true)
     public List<ArticleResponse> findAll() {
         return blogRepository.findAll()
                 .stream()

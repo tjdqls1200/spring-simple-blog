@@ -4,7 +4,6 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import me.sungbin.blog.domain.Article;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,7 +19,10 @@ public class BlogRepository {
         return article;
     }
 
-    @Transactional
+    public Article findById(Long id) {
+        return em.find(Article.class, id);
+    }
+
     public List<Article> findAll() {
         return em.createQuery("SELECT a FROM Article a", Article.class)
                 .getResultList();
